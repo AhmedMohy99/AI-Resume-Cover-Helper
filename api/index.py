@@ -117,4 +117,8 @@ def home():
         stripe_ready=False,
         demo=True,
         demo_version=DEMO_VERSION,
+        
+    @app.get("/__demo_check")
+def demo_check():
+    return {"ok": True, "mode": "demo", "version": "v2"}
     )
