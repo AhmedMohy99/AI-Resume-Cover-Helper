@@ -4,9 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AI Resume & Cover Letter Helper</title>
+
+  <!-- Static assets served from /public -->
   <link rel="stylesheet" href="/public/style.css" />
   <script defer src="/public/app.js"></script>
 </head>
+
 <body>
   <div class="bg"></div>
 
@@ -40,7 +43,7 @@
 
         <div class="note">
           {% if free_test %}
-            <b>Free Test Mode:</b> Enabled ✅ (for testing only)
+            <b>Free Test Mode:</b> Enabled ✅ <span class="muted">(for testing only)</span>
           {% else %}
             <b>Paid Mode:</b> Payment required to generate results.
           {% endif %}
@@ -72,12 +75,8 @@
                 <button class="btn" type="submit">Pay & Unlock</button>
               </form>
             {% else %}
-              <button class="btn ghost" type="button" disabled>
-                Payment not configured
-              </button>
-              <p class="muted small">
-                Add <code>STRIPE_SECRET_KEY</code>, <code>STRIPE_PRICE_ID</code>, <code>DOMAIN</code>
-              </p>
+              <button class="btn ghost" type="button" disabled>Payment not configured</button>
+              <p class="muted small">Add <code>STRIPE_SECRET_KEY</code>, <code>STRIPE_PRICE_ID</code>, <code>DOMAIN</code></p>
             {% endif %}
           </div>
 
@@ -87,7 +86,7 @@
               <span class="tag">EGY</span>
             </div>
             <p class="muted small">
-              Use Paymob (supports mobile wallets like Vodafone Cash). Configure later.
+              Paymob can support mobile wallets like Vodafone Cash (configure later).
             </p>
           </div>
         </div>
@@ -97,7 +96,7 @@
     <main class="main" id="tool">
       <div class="card">
         <h2>Generate your improved resume feedback</h2>
-        <p class="muted">We don’t store your files. Processing happens when you click Generate.</p>
+        <p class="muted">We don’t store your files. Processing happens only when you click Generate.</p>
 
         <form method="POST" enctype="multipart/form-data" class="form">
           <div class="grid">
@@ -105,6 +104,7 @@
               <label class="label">1) Upload Resume (PDF / DOCX)</label>
               <input class="input" type="file" name="resume" accept=".pdf,.docx" required>
             </div>
+
             <div>
               <label class="label">2) Paste Job Description</label>
               <textarea class="textarea" name="job_description" rows="8" placeholder="Paste the job description here..." required></textarea>
@@ -132,7 +132,7 @@
               <h3>AI Output</h3>
               <div class="actions">
                 <button class="btn small" type="button" onclick="copyResult()">Copy</button>
-                <button class="btn small ghost" type="button" onclick="toggleFocus()">Focus Mode</button>
+                <button class="btn small ghost" type="button" onclick="toggleFocus()">Focus</button>
               </div>
             </div>
 
@@ -141,7 +141,7 @@
           </section>
 
           <p class="muted small">
-            Note: We can discourage copying/screenshot, but web browsers cannot fully prevent it.
+            Note: Browsers can’t fully prevent screenshots. We can only discourage it (watermark, limited copy controls).
           </p>
         {% endif %}
       </div>
@@ -159,8 +159,7 @@
         </div>
 
         <div class="tip">
-          <b>Tip:</b> Add your real API key in Vercel env var:
-          <code>OPENAI_API_KEY</code>
+          <b>Tip:</b> Add your real API key in Vercel env var: <code>OPENAI_API_KEY</code>
         </div>
       </aside>
     </main>
