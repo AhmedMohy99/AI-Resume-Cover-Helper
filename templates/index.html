@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Resume & Cover Letter Helper</title>
+  <link rel="stylesheet" href="/public/style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="header">
+      <div class="badge">AI</div>
+      <div>
+        <h1>Resume & Cover Letter Helper</h1>
+        <p class="sub">Upload your resume → get suggestions, rewrites, and a tailored cover letter.</p>
+      </div>
+    </header>
+
+    <main class="card">
+      <form method="POST" enctype="multipart/form-data" class="form">
+        <label class="label">1) Upload Resume (PDF / DOCX)</label>
+        <input class="input" type="file" name="resume" accept=".pdf,.docx" required />
+
+        <label class="label">2) Paste Job Description</label>
+        <textarea class="textarea" name="job_description" rows="7" placeholder="Paste the job description here..." required></textarea>
+
+        <button class="btn" type="submit">Generate</button>
+      </form>
+
+      {% if error %}
+        <div class="alert">{{ error }}</div>
+      {% endif %}
+
+      {% if result %}
+        <section class="result">
+          <div class="result-top">
+            <h2>AI Output</h2>
+            <button class="btn2" onclick="copyResult()">Copy</button>
+          </div>
+          <pre id="resultBox">{{ result }}</pre>
+        </section>
+      {% endif %}
+    </main>
+
+    <footer class="footer">
+      <span>Powered by OpenAI</span>
+    </footer>
+  </div>
+
+  <script>
+    function copyResult() {
+      const el = document.getElementById("resultBox");
+      if (!el) return;
+      navigator.clipboard.writeText(el.innerText);
+      alert("Copied!");
+    }
+  </script>
+</body>
+</html>
