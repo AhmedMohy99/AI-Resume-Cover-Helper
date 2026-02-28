@@ -14,9 +14,8 @@ function toggleFocus() {
 window.copyResult = copyResult;
 window.toggleFocus = toggleFocus;
 
-// Light “discourage” actions (NOT secure)
+// Discourage right-click on result area (not real security)
 document.addEventListener("contextmenu", (e) => {
-  // disable right click only inside result
   const res = document.getElementById("resultSection");
   if (res && res.contains(e.target)) e.preventDefault();
 });
