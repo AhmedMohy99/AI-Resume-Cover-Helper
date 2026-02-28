@@ -98,8 +98,10 @@ def home():
         elif not job_description:
             error = "Please paste the job description."
         else:
-            resume_text = extract_text_from_file(resume_file)
-            result = generate_demo_ai_response(resume_text, job_description)
+           resume_text = extract_text_from_file(resume_file)
+if not resume_text:
+    resume_text = "(No readable text detected in file. Demo output will still be generated.)"
+result = generate_demo_ai_response(resume_text, job_description)
 
     return render_template(
         "index.html",
