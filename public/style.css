@@ -23,7 +23,6 @@ body{
     radial-gradient(900px 500px at 15% 10%, rgba(255,45,45,0.20), transparent 60%),
     radial-gradient(900px 500px at 80% 35%, rgba(45,255,143,0.12), transparent 60%),
     radial-gradient(800px 500px at 45% 85%, rgba(90,120,255,0.12), transparent 60%);
-  filter: blur(0px);
   z-index:-1;
 }
 
