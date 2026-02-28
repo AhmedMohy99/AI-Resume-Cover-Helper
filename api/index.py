@@ -9,21 +9,12 @@ import stripe
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = BASE_DIR / "templates"
 
-# Only templates here. Static files will be served by Vercel filesystem.
 app = Flask(__name__, template_folder=str(TEMPLATES_DIR))
 
-# =========================
-# ENV SETTINGS
-# =========================
 FREE_TEST_MODE = os.environ.get("FREE_TEST_MODE", "true").lower() == "true"
-
-# OpenAI Key
-# Add in Vercel: OPENAI_API_KEY
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "").strip()
 
-# Stripe (optional) - Visa/Master
-# Add in Vercel if you want payment:
-# STRIPE_SECRET_KEY, STRIPE_PRICE_ID, DOMAIN
+# Optional Stripe (Visa/Master)
 STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "").strip()
 STRIPE_PRICE_ID = os.environ.get("STRIPE_PRICE_ID", "").strip()
 DOMAIN = os.environ.get("DOMAIN", "").strip()  # e.g. https://your-project.vercel.app
@@ -54,11 +45,6 @@ def stripe_ready():
 
 
 def has_paid_access(req):
-    """
-    Paid access logic:
-    - If FREE_TEST_MODE = true -> allow access.
-    - Otherwise -> require Stripe checkout success.
-    """
     if FREE_TEST_MODE:
         return True
 
@@ -179,7 +165,6 @@ JOB DESCRIPTION:
             )
             result = response.choices[0].message.content
         except Exception:
-            # Hide technical details from user UI
             error = "AI request failed. Please check your API key/billing and try again."
 
     return render_template(
