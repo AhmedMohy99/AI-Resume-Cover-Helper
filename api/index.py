@@ -1,14 +1,18 @@
 import os
+from pathlib import Path
 from flask import Flask, render_template, request
 from openai import OpenAI
 import PyPDF2
 import docx
 
-# Vercel serverless entry
+BASE_DIR = Path(__file__).resolve().parent.parent  # project root
+TEMPLATES_DIR = BASE_DIR / "templates"
+PUBLIC_DIR = BASE_DIR / "public"
+
 app = Flask(
     __name__,
-    template_folder="../templates",
-    static_folder="../public",
+    template_folder=str(TEMPLATES_DIR),
+    static_folder=str(PUBLIC_DIR),
     static_url_path="/public",
 )
 
@@ -19,8 +23,7 @@ def extract_text_from_file(file_storage):
         reader = PyPDF2.PdfReader(file_storage.stream)
         text = ""
         for page in reader.pages:
-            page_text = page.extract_text() or ""
-            text += page_text + "\n"
+            text += (page.extract_text() or "") + "\n"
         return text.strip()
 
     if filename.endswith(".docx"):
@@ -91,7 +94,3 @@ JOB DESCRIPTION:
             error = f"AI request failed: {str(e)}"
 
     return render_template("index.html", result=result, error=error)
-
-# Required for Vercel
-def handler(request):
-    return app(request)
