@@ -1,0 +1,119 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b1220;
+  color: #e8eefc;
+}
+
+.wrap {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 28px 16px 40px;
+}
+
+.header {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: #ff2d2d;
+  color: #fff;
+  font-weight: 700;
+}
+
+h1 { margin: 0; font-size: 28px; }
+.sub { margin: 6px 0 0; color: #b9c6e6; }
+
+.card {
+  background: #111a2e;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+.form { display: grid; gap: 10px; }
+
+.label { font-weight: 700; margin-top: 6px; }
+
+.input, .textarea {
+  width: 100%;
+  background: #0b1220;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 12px;
+  color: #e8eefc;
+  outline: none;
+}
+
+.textarea { resize: vertical; }
+
+.btn {
+  margin-top: 8px;
+  background: #ff2d2d;
+  border: none;
+  color: #fff;
+  padding: 12px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.btn:hover { opacity: 0.92; }
+
+.alert {
+  margin-top: 12px;
+  background: rgba(255,45,45,0.12);
+  border: 1px solid rgba(255,45,45,0.25);
+  padding: 12px;
+  border-radius: 10px;
+  color: #ffd3d3;
+}
+
+.result {
+  margin-top: 16px;
+  background: #0b1220;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.result-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 12px 0 12px;
+}
+
+.btn2 {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.22);
+  color: #e8eefc;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin: 0;
+  padding: 12px;
+  color: #e8eefc;
+  line-height: 1.5;
+}
+
+.footer {
+  margin-top: 14px;
+  color: #b9c6e6;
+  font-size: 13px;
+}
