@@ -5,55 +5,170 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AI Resume & Cover Letter Helper</title>
   <link rel="stylesheet" href="/public/style.css" />
+  <script defer src="/public/app.js"></script>
 </head>
 <body>
-  <div class="wrap">
-    <header class="header">
-      <div class="badge">AI</div>
-      <div>
+  <div class="bg"></div>
+
+  <div class="container">
+    <nav class="nav">
+      <div class="logo">
+        <span class="dot"></span>
+        <span>AI</span>
+      </div>
+
+      <div class="nav-links">
+        <a href="#tool">Tool</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <div class="hero-left">
         <h1>Resume & Cover Letter Helper</h1>
-        <p class="sub">Upload your resume → get suggestions, rewrites, and a tailored cover letter.</p>
+        <p class="sub">
+          Upload your resume → get suggestions, rewrites, and a tailored cover letter.
+        </p>
+
+        <div class="chips">
+          <span class="chip">NLP</span>
+          <span class="chip">Prompting</span>
+          <span class="chip">UI</span>
+          <span class="chip">ATS</span>
+        </div>
+
+        <div class="note">
+          {% if free_test %}
+            <b>Free Test Mode:</b> Enabled ✅ (for testing only)
+          {% else %}
+            <b>Paid Mode:</b> Payment required to generate results.
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="hero-right" id="pricing">
+        <div class="card mini">
+          <h3>Pricing</h3>
+          <p class="muted">Choose your access mode.</p>
+
+          <div class="price-box">
+            <div class="price-line">
+              <span>Free Test</span>
+              <span class="tag">TEST</span>
+            </div>
+            <p class="muted small">Enable via Vercel env: <code>FREE_TEST_MODE=true</code></p>
+          </div>
+
+          <div class="price-box">
+            <div class="price-line">
+              <span>Paid (Visa/Master)</span>
+              <span class="tag green">SECURE</span>
+            </div>
+            <p class="muted small">Stripe Checkout</p>
+
+            {% if stripe_ready and not free_test %}
+              <form action="/create-checkout-session" method="POST">
+                <button class="btn" type="submit">Pay & Unlock</button>
+              </form>
+            {% else %}
+              <button class="btn ghost" type="button" disabled>
+                Payment not configured
+              </button>
+              <p class="muted small">
+                Add <code>STRIPE_SECRET_KEY</code>, <code>STRIPE_PRICE_ID</code>, <code>DOMAIN</code>
+              </p>
+            {% endif %}
+          </div>
+
+          <div class="price-box">
+            <div class="price-line">
+              <span>Vodafone Cash</span>
+              <span class="tag">EGY</span>
+            </div>
+            <p class="muted small">
+              Use Paymob (supports mobile wallets like Vodafone Cash). Configure later.
+            </p>
+          </div>
+        </div>
       </div>
     </header>
 
-    <main class="card">
-      <form method="POST" enctype="multipart/form-data" class="form">
-        <label class="label">1) Upload Resume (PDF / DOCX)</label>
-        <input class="input" type="file" name="resume" accept=".pdf,.docx" required />
+    <main class="main" id="tool">
+      <div class="card">
+        <h2>Generate your improved resume feedback</h2>
+        <p class="muted">We don’t store your files. Processing happens when you click Generate.</p>
 
-        <label class="label">2) Paste Job Description</label>
-        <textarea class="textarea" name="job_description" rows="7" placeholder="Paste the job description here..." required></textarea>
-
-        <button class="btn" type="submit">Generate</button>
-      </form>
-
-      {% if error %}
-        <div class="alert">{{ error }}</div>
-      {% endif %}
-
-      {% if result %}
-        <section class="result">
-          <div class="result-top">
-            <h2>AI Output</h2>
-            <button class="btn2" onclick="copyResult()">Copy</button>
+        <form method="POST" enctype="multipart/form-data" class="form">
+          <div class="grid">
+            <div>
+              <label class="label">1) Upload Resume (PDF / DOCX)</label>
+              <input class="input" type="file" name="resume" accept=".pdf,.docx" required>
+            </div>
+            <div>
+              <label class="label">2) Paste Job Description</label>
+              <textarea class="textarea" name="job_description" rows="8" placeholder="Paste the job description here..." required></textarea>
+            </div>
           </div>
-          <pre id="resultBox">{{ result }}</pre>
-        </section>
-      {% endif %}
+
+          <button class="btn" type="submit" {% if not paid_access %}disabled{% endif %}>
+            Generate
+          </button>
+
+          {% if not paid_access %}
+            <div class="alert">
+              Payment required to unlock generation. (Free test mode is OFF)
+            </div>
+          {% endif %}
+        </form>
+
+        {% if error %}
+          <div class="alert">{{ error }}</div>
+        {% endif %}
+
+        {% if result %}
+          <section class="result" id="resultSection">
+            <div class="result-top">
+              <h3>AI Output</h3>
+              <div class="actions">
+                <button class="btn small" type="button" onclick="copyResult()">Copy</button>
+                <button class="btn small ghost" type="button" onclick="toggleFocus()">Focus Mode</button>
+              </div>
+            </div>
+
+            <div class="watermark">CONFIDENTIAL • Paid Report</div>
+            <pre id="resultBox">{{ result }}</pre>
+          </section>
+
+          <p class="muted small">
+            Note: We can discourage copying/screenshot, but web browsers cannot fully prevent it.
+          </p>
+        {% endif %}
+      </div>
+
+      <aside class="side card" id="contact">
+        <h3>Contact Ahmed Mohy</h3>
+        <p class="muted">Let’s build your AI product.</p>
+
+        <div class="links">
+          <a target="_blank" rel="noopener" href="https://github.com/AhmedMohy99">GitHub</a>
+          <a target="_blank" rel="noopener" href="https://api.whatsapp.com/send/?phone=201016286261&text&type=phone_number&app_absent=0">WhatsApp</a>
+          <a target="_blank" rel="noopener" href="mailto:Ahmed171684@gmail.com">Email</a>
+          <a target="_blank" rel="noopener" href="https://www.instagram.com/ahmed.abdrabboo/">Instagram</a>
+          <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/ahmed-mohy-83b447220/">LinkedIn</a>
+        </div>
+
+        <div class="tip">
+          <b>Tip:</b> Add your real API key in Vercel env var:
+          <code>OPENAI_API_KEY</code>
+        </div>
+      </aside>
     </main>
 
     <footer class="footer">
       <span>Powered by OpenAI</span>
+      <span class="muted">© 2026 Ahmed Mohy</span>
     </footer>
   </div>
-
-  <script>
-    function copyResult() {
-      const el = document.getElementById("resultBox");
-      if (!el) return;
-      navigator.clipboard.writeText(el.innerText);
-      alert("Copied!");
-    }
-  </script>
 </body>
 </html>
