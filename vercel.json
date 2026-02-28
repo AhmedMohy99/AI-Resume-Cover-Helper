@@ -1,10 +1,6 @@
 {
-  "version": 2,
-  "builds": [
-    { "src": "api/index.py", "use": "@vercel/python" }
-  ],
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "api/index.py" }
-  ]
+  "ok": true,
+  "mode": "demo",
+  "version": "vFinal",
+  "payments_enabled": false
 }
