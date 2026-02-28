@@ -5,22 +5,16 @@ import PyPDF2
 import docx
 import stripe
 
-# ======================
-# SETUP
-# ======================
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = BASE_DIR / "templates"
 
 app = Flask(__name__, template_folder=str(TEMPLATES_DIR))
 
-DEMO_VERSION = "vFinal"
-PAYMENTS_ENABLED = False  # 🔴 PAUSED
+DEMO_VERSION = "vStable"
+PAYMENTS_ENABLED = False  # Payments paused
 
 print(f"✅ DEMO MODE DEPLOYED {DEMO_VERSION}")
 
-# ======================
-# PAYMENT CONFIG (PAUSED)
-# ======================
 STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "")
 STRIPE_PRICE_ID = os.environ.get("STRIPE_PRICE_ID", "")
 DOMAIN = os.environ.get("DOMAIN", "")
@@ -29,13 +23,6 @@ if STRIPE_SECRET_KEY:
     stripe.api_key = STRIPE_SECRET_KEY
 
 
-def stripe_ready():
-    return bool(STRIPE_SECRET_KEY and STRIPE_PRICE_ID and DOMAIN)
-
-
-# ======================
-# DEMO CHECK ENDPOINT
-# ======================
 @app.get("/__demo_check")
 def demo_check():
     return {
@@ -46,9 +33,6 @@ def demo_check():
     }
 
 
-# ======================
-# FILE READER
-# ======================
 def extract_text_from_file(file_storage):
     filename = (file_storage.filename or "").lower()
 
@@ -63,62 +47,40 @@ def extract_text_from_file(file_storage):
         if filename.endswith(".docx"):
             document = docx.Document(file_storage.stream)
             return "\n".join([p.text for p in document.paragraphs]).strip()
-
     except Exception:
         return ""
 
     return ""
 
 
-# ======================
-# DEMO AI OUTPUT
-# ======================
 def demo_ai(job_description):
-    jd = job_description.lower()
-    detected = []
-
-    for word in ["python", "sql", "machine learning", "nlp", "api", "docker", "aws", "flask", "analytics"]:
-        if word in jd:
-            detected.append(word)
-
-    keywords = ", ".join(detected) if detected else "communication, teamwork, ownership"
-
     return f"""
 [1] Resume Diagnosis
-• Good technical base detected.
-• Missing quantified achievements.
-• Improve clarity and measurable impact.
+• Strong professional base.
+• Add quantified achievements.
+• Improve measurable impact.
 
-[2] ATS Keyword Gaps
-• Suggested keywords: {keywords}
+[2] ATS Suggestions
+• Align resume keywords with job description.
 
-[3] Improved Resume Summary
-Results-driven professional delivering measurable outcomes and scalable solutions.
+[3] Improved Summary
+Results-driven professional focused on measurable performance and scalable solutions.
 
-[4] Improved Experience Bullet Example
-• Increased efficiency by 30% by automating internal reporting workflows.
-• Reduced processing time by 25% through system optimization.
+[4] Experience Improvement
+• Increased efficiency by 30% through automation.
+• Reduced workflow delays by 25%.
 
-[5] Tailored Cover Letter
+[5] Cover Letter
 Dear Hiring Manager,
-I am excited to apply for this role. My experience aligns strongly with your requirements and I am confident in my ability to deliver measurable results for your team.
+I am excited to apply for this role. My experience aligns strongly with your requirements and I am confident in delivering measurable results.
 
 Sincerely,
 Ahmed Mohy
 
-[6] Final Checklist
-✔ Add numbers
-✔ Use strong action verbs
-✔ Match job keywords
-✔ Keep ATS-friendly formatting
-
 ⚡ DEMO MODE ACTIVE — No OpenAI billing required.
-""".strip()
+"""
 
 
-# ======================
-# MAIN ROUTE
-# ======================
 @app.route("/", methods=["GET", "POST"])
 def home():
     result = ""
@@ -140,15 +102,11 @@ def home():
         result=result,
         error=error,
         demo=True,
-        demo_version=DEMO_VERSION,
-        payments_enabled=PAYMENTS_ENABLED,
-        stripe_ready=stripe_ready()
+        demo_version=DEMO_VERSION
     )
 
 
-# ======================
-# STRIPE ROUTE (PAUSED)
-# ======================
 @app.route("/create-checkout-session", methods=["POST"])
 def create_checkout_session():
+    # Payment paused
     return redirect(url_for("home"))
