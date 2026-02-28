@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AI Resume & Cover Letter Helper</title>
 
-  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
@@ -16,18 +15,24 @@
         radial-gradient(900px 500px at 85% 25%, rgba(34,197,94,0.10), transparent 60%),
         radial-gradient(700px 450px at 50% 90%, rgba(99,102,241,0.12), transparent 60%);
     }
-    .no-select { user-select: none; }
   </style>
 </head>
 
 <body class="min-h-screen bg-slate-950 text-slate-100">
   <div class="fixed inset-0 -z-10 glow"></div>
 
-  <!-- NAV -->
-  <nav class="sticky top-0 z-30 border-b border-white/10 glass">
+  {% if demo %}
+  <div class="max-w-7xl mx-auto px-4 pt-4">
+    <div class="p-3 rounded-2xl border border-emerald-400/30 bg-emerald-400/10 text-emerald-200 text-sm font-bold">
+      ✅ DEMO MODE is ACTIVE ({{ demo_version }}) — No OpenAI key/billing required
+    </div>
+  </div>
+  {% endif %}
+
+  <nav class="sticky top-0 z-30 border-b border-white/10 glass mt-4">
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3 font-black tracking-tight">
-        <span class="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_18px_rgba(239,68,68,0.65)]"></span>
+        <span class="w-3 h-3 rounded-full bg-red-500"></span>
         <span>AI</span>
       </div>
 
@@ -39,12 +44,8 @@
     </div>
   </nav>
 
-  <!-- PAGE -->
   <main class="max-w-7xl mx-auto px-4 py-10 space-y-8">
-
-    <!-- HERO GRID -->
     <section class="grid lg:grid-cols-2 gap-6 items-start">
-      <!-- Left hero -->
       <div class="space-y-4">
         <h1 class="text-4xl md:text-5xl font-black leading-tight">
           Resume & Cover Letter <span class="text-slate-300">Helper</span>
@@ -61,119 +62,49 @@
         </div>
 
         <div class="p-4 rounded-2xl border border-white/10 bg-white/5">
-          {% if free_test %}
-            <div class="flex items-center gap-2 text-sm">
-              <span class="text-emerald-400 font-bold">Free Test Mode:</span>
-              <span class="font-semibold">Enabled ✅</span>
-              <span class="text-slate-400">(for testing only)</span>
-            </div>
-          {% else %}
-            <div class="text-sm text-slate-200">
-              <b>Paid Mode:</b> Payment required to generate results.
-            </div>
-          {% endif %}
+          <div class="flex items-center gap-2 text-sm">
+            <span class="text-emerald-400 font-bold">Free Test Mode:</span>
+            <span class="font-semibold">Enabled ✅</span>
+            <span class="text-slate-400">(demo)</span>
+          </div>
         </div>
       </div>
 
-      <!-- Pricing card -->
       <div id="pricing" class="p-6 rounded-3xl border border-white/10 bg-white/5">
-        <div class="flex items-start justify-between">
-          <div>
-            <h2 class="text-xl font-extrabold">Pricing</h2>
-            <p class="text-slate-400 text-sm mt-1">Choose your access mode.</p>
-          </div>
-          <span class="text-xs px-3 py-1 rounded-full border border-white/10 bg-black/20 text-slate-300">Dashboard</span>
-        </div>
-
-        <div class="mt-5 space-y-3">
-          <div class="p-4 rounded-2xl border border-white/10 bg-black/20">
-            <div class="flex items-center justify-between">
-              <p class="font-extrabold">Free Test</p>
-              <span class="text-[10px] px-2 py-1 rounded-full border border-white/10 text-slate-300">TEST</span>
-            </div>
-            <p class="text-slate-400 text-xs mt-2">
-              Vercel env: <code class="px-2 py-1 rounded bg-black/30 border border-white/10">FREE_TEST_MODE=true</code>
-            </p>
-          </div>
-
-          <div class="p-4 rounded-2xl border border-white/10 bg-black/20">
-            <div class="flex items-center justify-between">
-              <p class="font-extrabold">Paid (Visa/Master)</p>
-              <span class="text-[10px] px-2 py-1 rounded-full border border-emerald-400/30 text-emerald-300">SECURE</span>
-            </div>
-            <p class="text-slate-400 text-xs mt-2">Stripe Checkout</p>
-
-            {% if stripe_ready and not free_test %}
-              <form action="/create-checkout-session" method="POST" class="mt-3">
-                <button class="w-full py-3 rounded-2xl bg-red-500 hover:bg-red-600 font-extrabold transition">
-                  Pay & Unlock
-                </button>
-              </form>
-            {% else %}
-              <button class="w-full mt-3 py-3 rounded-2xl bg-white/10 border border-white/10 text-slate-400 font-bold cursor-not-allowed" disabled>
-                Payment not configured
-              </button>
-              <p class="text-slate-500 text-[11px] mt-2">
-                Add <b>STRIPE_SECRET_KEY</b>, <b>STRIPE_PRICE_ID</b>, <b>DOMAIN</b>
-              </p>
-            {% endif %}
-          </div>
-
-          <div class="p-4 rounded-2xl border border-white/10 bg-black/20">
-            <div class="flex items-center justify-between">
-              <p class="font-extrabold">Vodafone Cash</p>
-              <span class="text-[10px] px-2 py-1 rounded-full border border-white/10 text-slate-300">EGY</span>
-            </div>
-            <p class="text-slate-400 text-xs mt-2">
-              Paymob can support mobile wallets like Vodafone Cash (configure later).
-            </p>
-          </div>
+        <h2 class="text-xl font-extrabold">Pricing</h2>
+        <p class="text-slate-400 text-sm mt-1">Demo enabled. Payments disabled for now.</p>
+        <div class="mt-4 p-4 rounded-2xl border border-white/10 bg-black/20 text-slate-300 text-sm">
+          When you’re ready, we can re-enable OpenAI + Stripe + Paymob.
         </div>
       </div>
     </section>
 
-    <!-- TOOL + CONTACT -->
     <section id="tool" class="grid lg:grid-cols-[1fr_380px] gap-6 items-start">
-      <!-- Tool card -->
       <div class="p-6 rounded-3xl border border-white/10 bg-white/5">
         <h2 class="text-2xl font-extrabold">Generate your improved resume feedback</h2>
         <p class="text-slate-400 mt-2 text-sm">
-          We don’t store your files. Processing happens when you click Generate.
+          Demo output is generated locally (no billing).
         </p>
 
         <form method="POST" enctype="multipart/form-data" class="mt-6 space-y-4">
           <div class="grid md:grid-cols-2 gap-4">
             <div>
               <label class="block font-bold mb-2 text-sm">1) Upload Resume (PDF / DOCX)</label>
-              <input
-                class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm"
-                type="file" name="resume" accept=".pdf,.docx" required
-              >
+              <input class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm"
+                     type="file" name="resume" accept=".pdf,.docx" required>
             </div>
 
             <div>
               <label class="block font-bold mb-2 text-sm">2) Paste Job Description</label>
-              <textarea
-                class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm min-h-[170px]"
-                name="job_description"
-                placeholder="Paste the job description here..."
-                required></textarea>
+              <textarea class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm min-h-[170px]"
+                        name="job_description" placeholder="Paste the job description here..." required></textarea>
             </div>
           </div>
 
-          <button
-            class="w-full md:w-auto px-6 py-3 rounded-2xl bg-red-500 hover:bg-red-600 font-extrabold transition disabled:opacity-50 disabled:cursor-not-allowed"
-            type="submit"
-            {% if not paid_access %}disabled{% endif %}
-          >
+          <button class="w-full md:w-auto px-6 py-3 rounded-2xl bg-red-500 hover:bg-red-600 font-extrabold transition"
+                  type="submit">
             Generate
           </button>
-
-          {% if not paid_access %}
-            <div class="p-4 rounded-2xl border border-red-500/30 bg-red-500/10 text-red-200 text-sm">
-              Payment required to unlock generation. (Free test mode is OFF)
-            </div>
-          {% endif %}
 
           {% if error %}
             <div class="p-4 rounded-2xl border border-red-500/30 bg-red-500/10 text-red-200 text-sm">
@@ -183,28 +114,19 @@
         </form>
 
         {% if result %}
-          <div class="mt-6 p-5 rounded-3xl border border-white/10 bg-black/30 relative">
+          <div class="mt-6 p-5 rounded-3xl border border-white/10 bg-black/30">
             <div class="flex items-center justify-between gap-3">
-              <h3 class="text-lg font-extrabold">AI Output</h3>
+              <h3 class="text-lg font-extrabold">Demo Output</h3>
               <button type="button" onclick="copyResult()"
                       class="px-4 py-2 rounded-xl bg-white/10 border border-white/10 hover:bg-white/15 font-bold text-sm">
                 Copy
               </button>
             </div>
-
-            <div class="absolute top-14 right-6 text-white/10 font-black rotate-[-10deg] no-select">
-              CONFIDENTIAL
-            </div>
-
             <pre id="resultBox" class="mt-4 whitespace-pre-wrap leading-7 text-slate-100 text-sm">{{ result }}</pre>
-            <p class="text-slate-500 text-xs mt-3">
-              Note: browsers can’t fully prevent screenshots. We can only discourage it.
-            </p>
           </div>
         {% endif %}
       </div>
 
-      <!-- Contact card -->
       <aside id="contact" class="p-6 rounded-3xl border border-white/10 bg-white/5">
         <h3 class="text-xl font-extrabold">Contact Ahmed Mohy</h3>
         <p class="text-slate-400 mt-1 text-sm">Let’s build your AI product.</p>
@@ -212,30 +134,20 @@
         <div class="mt-5 grid gap-2">
           <a class="px-4 py-3 rounded-2xl border border-white/10 bg-black/30 hover:bg-black/40 font-bold text-sm"
              target="_blank" rel="noopener" href="https://github.com/AhmedMohy99">GitHub</a>
-
           <a class="px-4 py-3 rounded-2xl border border-white/10 bg-black/30 hover:bg-black/40 font-bold text-sm"
              target="_blank" rel="noopener" href="https://api.whatsapp.com/send/?phone=201016286261&text&type=phone_number&app_absent=0">WhatsApp</a>
-
           <a class="px-4 py-3 rounded-2xl border border-white/10 bg-black/30 hover:bg-black/40 font-bold text-sm"
              target="_blank" rel="noopener" href="mailto:Ahmed171684@gmail.com">Email</a>
-
           <a class="px-4 py-3 rounded-2xl border border-white/10 bg-black/30 hover:bg-black/40 font-bold text-sm"
              target="_blank" rel="noopener" href="https://www.instagram.com/ahmed.abdrabboo/">Instagram</a>
-
           <a class="px-4 py-3 rounded-2xl border border-white/10 bg-black/30 hover:bg-black/40 font-bold text-sm"
              target="_blank" rel="noopener" href="https://www.linkedin.com/in/ahmed-mohy-83b447220/">LinkedIn</a>
-        </div>
-
-        <div class="mt-5 p-4 rounded-2xl border border-emerald-400/20 bg-emerald-400/10 text-slate-200 text-sm">
-          <b>Tip:</b> Add your real key in Vercel env:
-          <code class="px-2 py-1 rounded bg-black/30 border border-white/10">OPENAI_API_KEY</code>
         </div>
       </aside>
     </section>
 
-    <!-- FOOTER -->
     <footer class="pt-6 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
-      <span>Powered by OpenAI</span>
+      <span>Powered by Demo</span>
       <span>© 2026 Ahmed Mohy</span>
     </footer>
   </main>
